@@ -105,5 +105,15 @@ void imprimirLista(ListaCircularSieve *sieves)
 }
 
 short verificarSeElementosSaoDivisiveis(Sieve sieve, unsigned elementoComparado){
-    
+    short divisiveis = 0;
+    unsigned elemento;
+    for(int cursor=0; cursor<sieve.qntdValoresTestados; cursor++){
+        elemento = sieve.valoresTestados[cursor];
+        if(elementoComparado % elemento == 0 || elemento == 2){
+            divisiveis = 1;
+            break;
+        }
+    }
+
+    return divisiveis;
 }
