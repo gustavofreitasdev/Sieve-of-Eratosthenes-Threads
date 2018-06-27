@@ -70,6 +70,14 @@ short verificarSieveDisponivel(ListaCircularSieve *sieves, unsigned posicao){
     }
     return disponivel;
 }
+short verificarSieveEstaDisponivelCalculo(ListaCircularSieve *sieves, unsigned posicao){
+    short disponivel = 0;
+    if(sieves && posicao < sieves->tamanhoMaximo){
+        if(sieves->anel[posicao].estado == DESBLOQUEADO && sieves->anel[posicao].valorSerTestado != 0)
+            disponivel = 1;
+    }
+    return disponivel;
+}
 void setValorSerTestado(ListaCircularSieve *sieves, unsigned posicao, unsigned novoValor){
     if(sieves && posicao < sieves->tamanhoMaximo && sieves->anel[posicao].estado == DESBLOQUEADO && sieves->anel[posicao].valorSerTestado == 0){
         sieves->anel[posicao].valorSerTestado = novoValor;
@@ -136,7 +144,7 @@ short verificarSeElementosSaoDivisiveis(Sieve sieve, unsigned elementoComparado)
     for(int cursor=0; cursor<sieve.qntdValoresTestados; cursor++){
         elemento = sieve.valoresTestados[cursor];
         if(elementoComparado % elemento == 0 || elemento == 2){
-            divisiveis = 1;
+            divisiveis = elemento;
             break;
         }
     }

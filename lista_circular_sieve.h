@@ -6,20 +6,21 @@
 #define DESBLOQUEADO 0
 
 /* Estrutura responsável por armazenar dados do Sieve */
-typedef struct tSieve{
-    unsigned *valoresTestados;      /* BUFFER contendo todos os valores já testados */
-    unsigned valorSerTestado;       /* valor a ser testado, se for igual a 0 não tem nenhum valor a ser testado */
+typedef struct tSieve
+{
+    unsigned *valoresTestados; /* BUFFER contendo todos os valores já testados */
+    unsigned valorSerTestado;  /* valor a ser testado, se for igual a 0 não tem nenhum valor a ser testado */
 
-    unsigned qntdValoresTestados;   /* contador para quantidade de valores testados */
-    unsigned posicao;               /* posicao do sieve no anel circular (identifica o sieve) */
+    unsigned qntdValoresTestados; /* contador para quantidade de valores testados */
+    unsigned posicao;             /* posicao do sieve no anel circular (identifica o sieve) */
     short estado;
     unsigned cursor;
 } Sieve;
 /* Estrutura que tem implementação parecida com uma lista circular */
 typedef struct tListaCircularSieve
 {
-    unsigned tamanhoMaximo;         /* tamanho máximo que a lista pode atingir */
-    Sieve *anel;                    /* anel conténdo todas as informações do sieves */
+    unsigned tamanhoMaximo; /* tamanho máximo que a lista pode atingir */
+    Sieve *anel;            /* anel conténdo todas as informações do sieves */
     unsigned cursor;
 } ListaCircularSieve;
 
