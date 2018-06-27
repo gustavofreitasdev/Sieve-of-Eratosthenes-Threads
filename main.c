@@ -10,12 +10,13 @@ int main(int argc, char argv[])
     short continuar = 1;
     No *buffer = criarFila();   
     unsigned valoresTestar[n];
-    unsigned qntdValoresTestados = 0;
+    unsigned cursorBuffer = 0;
     int aux = 2;
     for(int cursor=0; cursor<n; cursor++){
         valoresTestar[cursor] = aux;
         aux++;
     }
+    aux = 0;
     resposta.resultado = -1;
     sievies = criarLista(QNTD_THREADS_SIEVE);
 
@@ -26,20 +27,26 @@ int main(int argc, char argv[])
     }
     pthread_create(&tResultado, NULL, resultado, NULL);
 
-    while(qntdValoresTestados == n){
+    while(continuar){
         /* INICIO SEÇÃO CRÍTICA */
         if(buffer->quantidade < m){
-            inserirFila(buffer, *valoresTestar);
+            inserirFila(buffer, valoresTestar[cursorBuffer]);
+            cursorBuffer++;
         }
-        pthread_mutex_lock(&gBloqueioMemoriaCompartilhada);
-            while (verificarSieveEstaDisponivelCalculo(sievies, 0) == 0)
-            {
-                pthread_cond_wait(&gSieves, &gBloqueioMemoriaCompartilhada);
-            }
-            
-            sievies->anel[0].valorSerTestado = *valoresTestar;
-            qntdValoresTestados = qntdNumerosCalculados;
-        pthread_mutex_unlock(&gBloqueioMemoriaCompartilhada);
+        if(buffer->quantidade > 0){
+            aux = retirarFila(buffer);
+            pthread_mutex_lock(&gBloqueioMemoriaCompartilhada);
+                while (verificarSieveEstaDisponivelCalculo(sievies, 0) == 0)
+                {
+                    pthread_cond_wait(&gSieves, &gBloqueioMemoriaCompartilhada);
+                }
+                
+                sievies->anel[0].valorSerTestado = aux;
+            pthread_mutex_unlock(&gBloqueioMemoriaCompartilhada);
+
+            pthread_cond_signal(&gSieves);
+        }
+        
     }
 
     pthread_join(tResultado, NULL);
