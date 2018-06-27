@@ -73,8 +73,9 @@ short verificarSieveDisponivel(ListaCircularSieve *sieves, unsigned posicao){
 short verificarSieveEstaDisponivelCalculo(ListaCircularSieve *sieves, unsigned posicao){
     short disponivel = 0;
     if(sieves && posicao < sieves->tamanhoMaximo){
-        if(sieves->anel[posicao].estado == DESBLOQUEADO && sieves->anel[posicao].valorSerTestado != 0)
+        if(sieves->anel[posicao].estado == DESBLOQUEADO && sieves->anel[posicao].valorSerTestado != 0){
             disponivel = 1;
+        }
     }
     return disponivel;
 }
@@ -82,17 +83,6 @@ void setValorSerTestado(ListaCircularSieve *sieves, unsigned posicao, unsigned n
     if(sieves && posicao < sieves->tamanhoMaximo && sieves->anel[posicao].estado == DESBLOQUEADO && sieves->anel[posicao].valorSerTestado == 0){
         sieves->anel[posicao].valorSerTestado = novoValor;
     }
-}
-Sieve *getSieveDisponivelCalculo(ListaCircularSieve *sieves){
-    Sieve *sieveDisponivel = NULL;
-    for(int cursor=0; cursor<sieves->tamanhoMaximo; cursor++){
-        if(sieves->anel[cursor].estado == DESBLOQUEADO && sieves->anel[cursor].valorSerTestado > 0){
-            sieveDisponivel = &sieves->anel[cursor];
-            break;
-        }
-    }
-
-    return sieveDisponivel;
 }
 
 short adicionarElementoLista(ListaCircularSieve *sieves, unsigned elemento){

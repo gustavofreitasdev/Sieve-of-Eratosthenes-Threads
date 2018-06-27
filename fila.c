@@ -45,6 +45,5 @@ int retirarFila(No *fila){
         aux->prox = NULL;
     }
     fila->quantidade--;
-    printf("%d\n",valor);
     return valor;
 }

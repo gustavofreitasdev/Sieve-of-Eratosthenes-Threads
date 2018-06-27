@@ -11,6 +11,7 @@ typedef struct tResposta
     unsigned divisor;
     short ePrimo;
     int sieve;
+    short estado;
 } Resposta;
 
 /* Constantes */
