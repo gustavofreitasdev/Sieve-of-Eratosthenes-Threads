@@ -4,17 +4,13 @@
 #include <unistd.h>
 
 /* TADS */
-typedef struct tResposta{
+typedef struct tResposta
+{
     char *mensagem;
     int siege;
 } Resposta;
 
-
 /* CONSTANTES */
-#define NUM_READERS 5
-#define NUM_READS 5
-#define NUM_WRITERS 5
-#define NUM_WRITES 5
 
 /* Dadois Compartilhados Globais */
 Resposta resposta;
