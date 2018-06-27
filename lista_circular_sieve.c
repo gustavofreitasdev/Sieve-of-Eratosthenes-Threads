@@ -24,6 +24,7 @@ ListaCircularSieve *criarLista(int tamanho)
                     sieve.valorSerTestado = 0;
                     sieve.qntdValoresTestados = 0;
                     sieve.estado = DESBLOQUEADO;
+                    sieve.cursor = 0;
                     resultado->anel[cursor] = sieve;
                 }
                 else
@@ -86,15 +87,20 @@ Sieve *getSieveDisponivelCalculo(ListaCircularSieve *sieves){
     return sieveDisponivel;
 }
 
-short adicionarElementoLista(ListaCircularSieve *sieves, unsigned posicao, unsigned elemento){
+short adicionarElementoLista(ListaCircularSieve *sieves, unsigned elemento){
     short elementoAdicionado = 0;
-    if(sieves && posicao < sieves->tamanhoMaximo){
+    if(sieves){
+        int posicao = sieves->cursor;
         Sieve sieve = sieves->anel[posicao];
         if(sieve.qntdValoresTestados < BUFFER_SIEVE){
             sieves->anel[posicao].valoresTestados[sieve.qntdValoresTestados] = elemento;
             sieves->anel[posicao].qntdValoresTestados++;
             elementoAdicionado = 1;
         }
+        if(sieves->cursor+1 < sieves->tamanhoMaximo)
+            sieves->cursor++;
+        else
+            sieves->cursor = 0;
     }
 
     return elementoAdicionado;

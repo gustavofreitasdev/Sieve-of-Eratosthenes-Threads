@@ -6,9 +6,9 @@ int main(void){
     bloquearSieve(sieves, 3);
     short teste = verificarSieveDisponivel(sieves, 0);
     short teste2 = verificarSieveDisponivel(sieves, 1);
-    adicionarElementoLista(sieves, 0, 2);
-    adicionarElementoLista(sieves, 1, 3);
-    adicionarElementoLista(sieves, 0, 4);
+    adicionarElementoLista(sieves, 2);
+    adicionarElementoLista(sieves, 3);
+    adicionarElementoLista(sieves, 4);
     printf("teste1 (block): %d, teste2(desbloc): %d\n", teste, teste2);
 
 
