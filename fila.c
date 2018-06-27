@@ -1,5 +1,7 @@
 #include "fila_int.h"
 
+
+//cria fila e inicializa variaveis
 No *criarFila(){
     No *fila;
     fila = (No *)malloc(sizeof(No));
@@ -13,6 +15,7 @@ No *criarFila(){
 
 }
 
+//insere elemento no inicio da fila
 void inserirFila(No *fila,int valor){
     No *aux = fila->prox;
     No *elemento = (No *)malloc(sizeof(No));
@@ -24,6 +27,7 @@ void inserirFila(No *fila,int valor){
     }
 }
 
+//retira e le elemento do fim da fila
 int retirarFila(No *fila){
     No *aux = fila->prox;
     int i,valor;
