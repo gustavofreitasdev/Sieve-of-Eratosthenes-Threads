@@ -24,12 +24,13 @@ typedef struct tListaCircularSieve
     unsigned cursor;
 } ListaCircularSieve;
 
-ListaCircularSieve *criar_Lista(int tamanho);
+ListaCircularSieve *criarLista(int tamanho);
 void liberarLista(ListaCircularSieve *lista);
 
-void bloquearSieve(ListaCircularSieve *sieve, unsigned posicao);
+void bloquearSieve(ListaCircularSieve *sieves, unsigned posicao);
 void desbloquearSieve(ListaCircularSieve *sieves, unsigned posicao);
 short verificarSieveDisponivel(ListaCircularSieve *sieve, unsigned posicao);
+short verificarSieveEstaDisponivelCalculo(ListaCircularSieve *sieves, unsigned posicao);
 Sieve *getSieveDisponivelCalculo(ListaCircularSieve *sieves);
 void setValorSerTestado(ListaCircularSieve *sieves, unsigned posicao, unsigned novoValor);
 short adicionarElementoLista(ListaCircularSieve *sieves, unsigned elemento);

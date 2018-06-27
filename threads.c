@@ -1,7 +1,4 @@
 #include "threads.h"
-#include "lista_circular_sieve.h"
-
-void *principal(void *param) {}
 
 void *sieve(void *param)
 {
@@ -10,22 +7,24 @@ void *sieve(void *param)
     unsigned numeroTestar;
     short testePrimo;
     Resposta resultado;
+    Sieve sieve;
     while (1)
     {
         /* INICIO SEÇÃO CRÍTICA */
         pthread_mutex_lock(&gBloqueioMemoriaCompartilhada);
-            while (verificarSieveEstaDisponivelCalculo(sievies[id], id) == 0)
+            while (verificarSieveEstaDisponivelCalculo(sievies, id) == 0)
             {
                 pthread_cond_wait(&gSieves, &gBloqueioMemoriaCompartilhada);
             }
             
             bloquearSieve(sievies, id);
-            numeroTestar = sievies->anel[id].valorSerTestado;
-            testePrimo = verificarSeElementosSaoDivisiveis(sievies->anel[id], numeroTestar);
+            sieve = sievies->anel[id];
+            numeroTestar = sieve.valorSerTestado;
+            testePrimo = verificarSeElementosSaoDivisiveis(sieve, numeroTestar);
         pthread_mutex_unlock(&gBloqueioMemoriaCompartilhada);
         /* FIM SEÇÃO CRÍTICA */
 
-        if(testePrimo == 0){
+        if(testePrimo){
             pthread_mutex_lock(&gBloqueioMemoriaCompartilhada);
                 while (resposta.resultado != -1)
                 {
@@ -33,15 +32,15 @@ void *sieve(void *param)
                     pthread_cond_wait(&gResultado, &gBloqueioMemoriaCompartilhada);
                 }
                 resposta.resultado = numeroTestar;
-                resposta.ePrimo = 1;
-                resposta.siege = id;
-                
+                resposta.ePrimo = 0;
+                resposta.divisor = testePrimo;
+                resposta.sieve = id;
             pthread_mutex_unlock(&gBloqueioMemoriaCompartilhada);
             
             pthread_cond_signal(&gResultado);
         }
         else{
-            if(idComunicacao == QNTD_THREADS_SIEGE){
+            if(idComunicacao == QNTD_THREADS_SIEVE){
                 pthread_mutex_lock(&gBloqueioMemoriaCompartilhada);
                     while (resposta.resultado != -1)
                     {
@@ -49,9 +48,8 @@ void *sieve(void *param)
                         pthread_cond_wait(&gResultado, &gBloqueioMemoriaCompartilhada);
                     }
                     resposta.resultado = numeroTestar;
-                    resposta.ePrimo = 0;
-                    resposta.divisor = testePrimo;
-                    resposta.siege = id;
+                    resposta.ePrimo = 1;
+                    resposta.sieve = id;
                 pthread_mutex_unlock(&gBloqueioMemoriaCompartilhada);
 
                 pthread_cond_signal(&gResultado);
@@ -59,7 +57,7 @@ void *sieve(void *param)
             else{
                 /* INICIO SEÇÃO CRÍTICA */
                 pthread_mutex_lock(&gBloqueioMemoriaCompartilhada);
-                    while (verificarSieveEstaDisponivelCalculo(sievies[idComunicacao], idComunicacao) == 0)
+                    while (verificarSieveEstaDisponivelCalculo(sievies, idComunicacao) == 0)
                     {
                         pthread_cond_wait(&gSieves, &gBloqueioMemoriaCompartilhada);
                     }
@@ -74,7 +72,7 @@ void *sieve(void *param)
 
         pthread_mutex_lock(&gBloqueioMemoriaCompartilhada);
             sievies->anel[id].valorSerTestado = 0;
-            desbloquearSieve(siege, id);
+            desbloquearSieve(sievies, id);
         pthread_mutex_unlock(&gBloqueioMemoriaCompartilhada);
     }
 
@@ -105,11 +103,11 @@ void *resultado(void *param)
 
         if (resultado.ePrimo == 1)
         {
-            printf("%d is prime (stored in sieve %d)", resultado.resultado, resultado.siege); /* caso o número for primo */
+            printf("%d is prime (stored in sieve %d)", resultado.resultado, resultado.sieve); /* caso o número for primo */
         }
         else
         {
-            printf("%d divided by %d at sieve %d", resultado.resultado, resultado.divisor, resultado.siege); /* caso o número não for primo */
+            printf("%d divided by %d at sieve %d", resultado.resultado, resultado.divisor, resultado.sieve); /* caso o número não for primo */
         }
         fflush(stdout);
 
