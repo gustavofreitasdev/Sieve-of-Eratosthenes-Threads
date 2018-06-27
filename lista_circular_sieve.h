@@ -12,7 +12,7 @@ typedef struct tSieve{
 
     unsigned qntdValoresTestados;   /* contador para quantidade de valores testados */
     unsigned posicao;               /* posicao do sieve no anel circular (identifica o sieve) */
-    short bloqueado;
+    short estado;
 } Sieve;
 /* Estrutura que tem implementação parecida com uma lista circular */
 typedef struct tListaCircularSieve
@@ -26,7 +26,10 @@ ListaCircularSieve *criar_Lista(int tamanho);
 void liberarLista(ListaCircularSieve *lista);
 
 void bloquearSieve(ListaCircularSieve *sieve, unsigned posicao);
+void desbloquearSieve(ListaCircularSieve *sieves, unsigned posicao);
 short verificarSieveDisponivel(ListaCircularSieve *sieve, unsigned posicao);
+Sieve *getSieveDisponivelCalculo(ListaCircularSieve *sieves);
+void setValorSerTestado(ListaCircularSieve *sieves, unsigned posicao, unsigned novoValor);
 short adicionarElementoLista(ListaCircularSieve *sieves, unsigned posicao, unsigned elemento);
 
 void imprimirLista(ListaCircularSieve *sieves);

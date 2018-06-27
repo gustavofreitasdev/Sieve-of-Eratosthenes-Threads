@@ -23,7 +23,7 @@ ListaCircularSieve *criarLista(int tamanho)
 
                     sieve.valorSerTestado = 0;
                     sieve.qntdValoresTestados = 0;
-                    sieve.bloqueado = DESBLOQUEADO;
+                    sieve.estado = DESBLOQUEADO;
                     resultado->anel[cursor] = sieve;
                 }
                 else
@@ -55,15 +55,35 @@ void liberarLista(ListaCircularSieve *lista)
 
 void bloquearSieve(ListaCircularSieve *sieves, unsigned posicao)
 {
-    if (sieves && posicao < sieves->tamanhoMaximo && sieves->anel[posicao].bloqueado == 0)
-        sieves->anel[posicao].bloqueado = 1;
+    if (sieves && posicao < sieves->tamanhoMaximo && sieves->anel[posicao].estado == DESBLOQUEADO)
+        sieves->anel[posicao].estado = BLOQUEADO;
+}
+void desbloquearSieve(ListaCircularSieve *sieves, unsigned posicao){
+    if (sieves && posicao < sieves->tamanhoMaximo && sieves->anel[posicao].estado == BLOQUEADO)
+        sieves->anel[posicao].estado = DESBLOQUEADO;
 }
 short verificarSieveDisponivel(ListaCircularSieve *sieves, unsigned posicao){
     short disponivel = DESBLOQUEADO;
     if(sieves && posicao < sieves->tamanhoMaximo){
-        disponivel = sieves->anel[posicao].bloqueado;        
+        disponivel = sieves->anel[posicao].estado;        
     }
     return disponivel;
+}
+void setValorSerTestado(ListaCircularSieve *sieves, unsigned posicao, unsigned novoValor){
+    if(sieves && posicao < sieves->tamanhoMaximo && sieves->anel[posicao].estado == DESBLOQUEADO && sieves->anel[posicao].valorSerTestado == 0){
+        sieves->anel[posicao].valorSerTestado = novoValor;
+    }
+}
+Sieve *getSieveDisponivelCalculo(ListaCircularSieve *sieves){
+    Sieve *sieveDisponivel = NULL;
+    for(int cursor=0; cursor<sieves->tamanhoMaximo; cursor++){
+        if(sieves->anel[cursor].estado == DESBLOQUEADO && sieves->anel[cursor].valorSerTestado > 0){
+            sieveDisponivel = &sieves->anel[cursor];
+            break;
+        }
+    }
+
+    return sieveDisponivel;
 }
 
 short adicionarElementoLista(ListaCircularSieve *sieves, unsigned posicao, unsigned elemento){
@@ -87,7 +107,7 @@ void imprimirLista(ListaCircularSieve *sieves)
     for (int cursor = 0; cursor < sieves->tamanhoMaximo; cursor++)
     {
         sieve = sieves->anel[cursor];
-        if (sieve.bloqueado == BLOQUEADO)
+        if (sieve.estado == BLOQUEADO)
             printf("[sieve %d] valor ser testado %d - bloqueado\n", cursor, sieves->anel[cursor].valorSerTestado);
         else
             printf("[sieve %d] valor ser testado %d - desbloqueado\n", cursor, sieves->anel[cursor].valorSerTestado);
