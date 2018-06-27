@@ -47,3 +47,14 @@ int retirarFila(No *fila){
     fila->quantidade--;
     return valor;
 }
+
+void imprimirFila(No *fila){
+    No *aux = fila->prox;
+    while(aux != NULL){
+        printf("%d ", aux->numero);
+        fflush(stdout);
+        aux = aux->prox;
+    }
+    printf("\n");
+    fflush(stdout);
+}

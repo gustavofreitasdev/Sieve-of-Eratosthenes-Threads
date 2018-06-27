@@ -26,7 +26,6 @@ void *sieve(void *param)
             testePrimo = verificarSeElementosSaoDivisiveis(sieve, numeroTestar);
         pthread_mutex_unlock(&gBloqueioMemoriaCompartilhada);
         /* Fim Seção Crítica */
-
         if(testePrimo){
             /* Se encontrou um divisor (número não é primo) */
             /* Seção Crítica */
@@ -66,6 +65,7 @@ void *sieve(void *param)
             }
             else{
                 /* Seção Crítica */
+
                 pthread_mutex_lock(&gBloqueioMemoriaCompartilhada);
                     while (verificarSieveDisponivel(sievies, idComunicacao) == BLOQUEADO)
                     {
@@ -110,7 +110,7 @@ void *resultado(void *param)
         
         /* INICIO SEÇÃO CRÍTICA */
         pthread_mutex_lock(&gBloqueioMemoriaCompartilhada);
-            while (resposta.estado == BLOQUEADO && resposta.resultado == 0)
+            while (resposta.estado == BLOQUEADO || resposta.resultado == 0)
             {
                 /* Continua no laço e fica na espera até o resultado da resposta seja um valor válido */
                 pthread_cond_wait(&gResultado, &gBloqueioMemoriaCompartilhada);

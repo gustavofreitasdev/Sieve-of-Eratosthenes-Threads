@@ -16,7 +16,7 @@ int main(int argc, char argv[])
     pthread_t tSieves[QNTD_THREADS_SIEVE];
     pthread_t tResultado;
 
-    /* Buffer */
+    /* Buffers */
     No *buffer = criarFila();
     unsigned valoresTestar[n]; /* vetor que contém todos os valores a ser testados */
     int aux = 2;
@@ -59,9 +59,9 @@ int main(int argc, char argv[])
                     /* Continua no laço e fica o sieve 0 esteje desbloqueado */
                     pthread_cond_wait(&gSieves, &gBloqueioMemoriaCompartilhada);
                 }
+
                 bloquearSieve(sievies, 0);
                 aux = retirarFila(buffer); /* retira o número a ser testado */
-                cursorBuffer--; /* atualiza cursor do buffer */
                 sievies->anel[0].valorSerTestado = aux;
                 desbloquearSieve(sievies, 0);
             pthread_mutex_unlock(&gBloqueioMemoriaCompartilhada);
