@@ -76,6 +76,11 @@ void setValorSerTestado(ListaCircularSieve *sieves, unsigned posicao, unsigned n
         sieves->anel[posicao].valorSerTestado = novoValor; /* muda o valor a ser testado da Sieve */
     }
 }
+void reiniciarValoreSerTestado(ListaCircularSieve *sieves, unsigned posicao){
+    if(sieves && posicao < sieves->tamanhoMaximo){
+        sieves->anel[posicao].valorSerTestado = 0;
+    }
+}
 void adicionarElementoLista(ListaCircularSieve *sieves, unsigned elemento)
 {
     if (sieves)
@@ -138,7 +143,7 @@ short verificarSieveEstaDisponivelCalculo(ListaCircularSieve *sieves, unsigned p
     if (sieves && posicao < sieves->tamanhoMaximo)
     {
         /* Caso a Sieve e a posição for válida */
-        if (sieves->anel[posicao].estado == DESBLOQUEADO && sieves->anel[posicao].valorSerTestado != 0)
+        if (sieves->anel[posicao].estado == DESBLOQUEADO && sieves->anel[posicao].valorSerTestado > 0)
         {
             /* Caso a Sieve estiver desbloqueada e o valor a ser testado for diferente de 0 */
             estado = 1; /* muda o estado para disponível para o cálculo */
@@ -146,24 +151,7 @@ short verificarSieveEstaDisponivelCalculo(ListaCircularSieve *sieves, unsigned p
     }
     return estado;
 }
-short verificarSeElementosSaoDivisiveis(Sieve sieve, unsigned elementoComparado)
-{
-    short divisiveis = 0; /* flag que indicara se algum elemento dos valores testados são divisiveis, inicialmente consideramos que não tenha */
-    unsigned elemento;    /* variável para auxilar nos testes */
-    for (int cursor = 0; cursor < sieve.qntdValoresTestados; cursor++)
-    {
-        /* Loop que percorre o vetor de valores testados da Sieve */
-        elemento = sieve.valoresTestados[cursor]; /* captura o elemento a ser comparado atual */
-        if (elementoComparado % elemento == 0)
-        {
-            /* Se o elemento comparado for divisível por 2 */
-            divisiveis = elemento; /* captura elemento que conseguiu dividir e para o loop */
-            break;
-        }
-    }
 
-    return divisiveis;
-}
 short propagarDadoNaRede(ListaCircularSieve *sieves, unsigned dado)
 {
     short dadoEnviado = 0; /* flag responsável guardar se dado foi propagar (1) ou não (0)*/
@@ -192,4 +180,23 @@ short verificarPropagarDado(ListaCircularSieve *sieves, unsigned posicao)
         }
     }
     return propagar;
+}
+
+unsigned buscarDivisorSieve(Sieve sieve, unsigned elementoComparado)
+{
+    unsigned divisor = 0; /* flag que indicara se algum elemento dos valores testados são divisiveis, inicialmente consideramos que não tenha */
+    unsigned elemento;    /* variável para auxilar nos testes */
+    for (int cursor = 0; cursor < sieve.qntdValoresTestados; cursor++)
+    {
+        /* Loop que percorre o vetor de valores testados da Sieve */
+        elemento = sieve.valoresTestados[cursor]; /* captura o elemento a ser comparado atual */
+        if (elementoComparado % elemento == 0)
+        {
+            /* Se o elemento comparado for divisível por 2 */
+            divisor = elemento; /* captura elemento que conseguiu dividir e para o loop */
+            break;
+        }
+    }
+
+    return divisor;
 }

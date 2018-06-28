@@ -34,6 +34,7 @@ void bloquearSieve(ListaCircularSieve *sieves, unsigned posicao);
 void desbloquearSieve(ListaCircularSieve *sieves, unsigned posicao);
 /* Função responsável por mudar valor a ser testado de um Sieve, dada uma Lista Circular Sieve, a posição do Sieve e o novo valor */
 void setValorSerTestado(ListaCircularSieve *sieves, unsigned posicao, unsigned novoValor);
+void reiniciarValoreSerTestado(ListaCircularSieve *sieves, unsigned posicao);
 /* Função responsável por adicionar elementos de forma balanceada na Lista Circular Sieve, dado a Lista Circular e o novo elemento a ser adicionado */
 void adicionarElementoLista(ListaCircularSieve *sieves, unsigned elemento);
 /* Função responsável por imprimir uma Lista Circular Sieve */
@@ -47,3 +48,6 @@ short verificarSieveEstaDisponivelCalculo(ListaCircularSieve *sieves, unsigned p
 short verificarSeElementosSaoDivisiveis(Sieve sieve, unsigned elementoComparado);
 /* Função responsável por colocar dados no início da rede */
 short propagarDadoNaRede(ListaCircularSieve *sieves, unsigned dado);
+short verificarPropagarDado(ListaCircularSieve *sieves, unsigned posicao);
+
+unsigned buscarDivisorSieve(Sieve sieve, unsigned elementoComparado);

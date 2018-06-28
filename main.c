@@ -4,8 +4,7 @@
 int main(int argc, char argv[])
 {
     /* Inicializadores */
-    resposta.resultado = 0;
-    resposta.estado = DESBLOQUEADO;
+    resposta = criarResposta();
     sievies = criarLista(QNTD_THREADS_SIEVE);
 
     /* Variáveis */
@@ -25,49 +24,51 @@ int main(int argc, char argv[])
         valoresTestar[cursor] = aux;
         aux++;
     }
-    aux = 0; /* reinicilizar váriável para poder ser usada em outras partes do código */
     unsigned auxSieves[QNTD_THREADS_SIEVE]; /* buffer auxiliar para passagem de argumentos para threads sieve */
-    for (aux = 0; aux < QNTD_THREADS_SIEVE; aux++)
-        auxSieves[aux] = aux;
+    for (int aux2 = 0; aux2 < QNTD_THREADS_SIEVE; aux2++)
+        auxSieves[aux2] = aux2;
     
     /* Flags e Auxiliares */
     short continuar = 1; /* flag que indica se todos os valores já foram testados */
     unsigned qntdValoresEnviadoRede = 0; /* contador com quantidade de valores já enviados para rede */
     unsigned cursorBuffer = 0; /* cursor para percorrer o buffer */
 
+    pthread_create(&tResultado, NULL, resultado, NULL); /* cria Thread de Resultado */
     /* Tarefas */
     for (int i = 0; i < QNTD_THREADS_SIEVE; i++)
     {
         /* Loop para criar todas as Threads de Sieve */
         pthread_create(&tSieves[i], NULL, sieve, &auxSieves[i]);
     }
-    pthread_create(&tResultado, NULL, resultado, NULL); /* cria Thread de Resultado */
 
+    /* Tarefas */
     while(continuar){
-        /* Enquanto todos os valores não forem enviados e testados na rede */
-        if(buffer->quantidade < m){
-            /* Se buffer tem espaço */
-            inserirFila(buffer, valoresTestar[cursorBuffer]); /* inseri novo elemento */
-            cursorBuffer++; /* atualiza cursor de buffer */
+        if(buffer->quantidade < m && cursorBuffer < n){
+            /* Caso o buffer tiver espaço e ainda tiver valores a testar */
+            inserirFila(buffer, valoresTestar[cursorBuffer]);
+            cursorBuffer++;
+            
+            printf("(principal) jogando dados no buffer\n");
+            fflush(stdout);
         }
         if(buffer->quantidade > 0){
-            /* Se tiver algum número a ser testado no buffer */
-            /* Seção Crítica */
             pthread_mutex_lock(&gBloqueioMemoriaCompartilhada);
-                while (verificarSieveDisponivel(sievies, 0) == BLOQUEADO)
+                while (verificarSieveDisponivel(sievies, 0) ==  BLOQUEADO)
                 {
-                    /* Continua no laço e fica o sieve 0 esteje desbloqueado */
-                    pthread_cond_wait(&gSieves, &gBloqueioMemoriaCompartilhada);
+                    /* Continua no laço e fica na espera até o resultado da resposta seja um valor válido */
+                    pthread_cond_wait(&gResultado, &gBloqueioMemoriaCompartilhada);
                 }
 
-                bloquearSieve(sievies, 0);
-                imprimirLista(sievies);
-                while(!propagarDadoNaRede(sievies, retirarFila(buffer)));
-                desbloquearSieve(sievies, 0);
+                propagarDadoNaRede(sievies, retirarFila(buffer));
+                qntdValoresEnviadoRede++;
+
+                printf("(principal) propagando dados na rede\n");
+                fflush(stdout);
             pthread_mutex_unlock(&gBloqueioMemoriaCompartilhada);
-            /* Fim Seção Crítica */
-            pthread_cond_broadcast(&gSieves); /* envia sinal para sieve 0 */
+            pthread_cond_broadcast(&gSieves);
         }
+        
+        pthread_cond_signal(&gResultado);
     }
 
     /* Uniões */
