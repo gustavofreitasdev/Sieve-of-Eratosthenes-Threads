@@ -3,16 +3,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include "lista_circular_sieve.c"
-
-/* Tads */
-typedef struct tResposta
-{
-    unsigned resultado;
-    unsigned divisor;
-    short ePrimo;
-    int sieve;
-    short estado;
-} Resposta;
+#include "resposta.h"
 
 /* Constantes */
 #define QNTD_THREADS_PRINCIPAL 1

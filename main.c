@@ -61,12 +61,12 @@ int main(int argc, char argv[])
                 }
 
                 bloquearSieve(sievies, 0);
-                aux = retirarFila(buffer); /* retira o número a ser testado */
-                sievies->anel[0].valorSerTestado = aux;
+                imprimirLista(sievies);
+                while(!propagarDadoNaRede(sievies, retirarFila(buffer)));
                 desbloquearSieve(sievies, 0);
             pthread_mutex_unlock(&gBloqueioMemoriaCompartilhada);
             /* Fim Seção Crítica */
-            pthread_cond_signal(&gSieves); /* envia sinal para sieve 0 */
+            pthread_cond_broadcast(&gSieves); /* envia sinal para sieve 0 */
         }
     }
 

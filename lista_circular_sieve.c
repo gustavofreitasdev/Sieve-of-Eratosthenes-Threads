@@ -50,12 +50,13 @@ ListaCircularSieve *criarLista(int tamanho)
 }
 void liberarLista(ListaCircularSieve *lista)
 {
-    for(int cursor=0; cursor<lista->tamanhoMaximo; cursor++){
+    for (int cursor = 0; cursor < lista->tamanhoMaximo; cursor++)
+    {
         /* Loop para liberar todo espaço alocado para valores testados de cada Sieve da lista */
         free(lista->anel[cursor].valoresTestados);
     }
     free(lista->anel); /* libera espaço alocado para anel (vetor de sieve) */
-    free(lista); /* libera espaçõ alocado para a Lista Circular Sieve */
+    free(lista);       /* libera espaçõ alocado para a Lista Circular Sieve */
 }
 void bloquearSieve(ListaCircularSieve *sieves, unsigned posicao)
 {
@@ -80,29 +81,29 @@ void adicionarElementoLista(ListaCircularSieve *sieves, unsigned elemento)
     if (sieves)
     {
         /* Caso a Lista Circular Sieve for válida */
-        int posicao = sieves->cursor; /* captura posição que está o cursor */
+        int posicao = sieves->cursor;        /* captura posição que está o cursor */
         Sieve sieve = sieves->anel[posicao]; /* captura a sieve para facilitar as verificações */
         if (sieve.qntdValoresTestados < BUFFER_SIEVE)
         {
             /* Caso o vetor não estiver cheio */
             sieves->anel[posicao].valoresTestados[sieve.qntdValoresTestados] = elemento; /* adiciona o novo elemento no final do vetor */
-            sieves->anel[posicao].qntdValoresTestados++; /* incrementa a quantidade de valores testados (adiciona só quando o elemento já foi testado) */
+            sieves->anel[posicao].qntdValoresTestados++;                                 /* incrementa a quantidade de valores testados (adiciona só quando o elemento já foi testado) */
         }
         /* Atualiza o cursor para manter os vetores de valores testados de cada Sieve balanceado */
         if (sieves->cursor + 1 < sieves->tamanhoMaximo) /* caso não estiver no 'último' valor da lista */
             sieves->cursor++;
-        else /* caso estiver no 'último' valor da lista */
+        else                    /* caso estiver no 'último' valor da lista */
             sieves->cursor = 0; /* volta pro início */
     }
 }
 void imprimirLista(ListaCircularSieve *sieves)
 {
-    Sieve sieve; /* variável para auxilar na impressão da lista */
+    Sieve sieve;    /* variável para auxilar na impressão da lista */
     unsigned *anel; /* váriavel par auxilar na impressão dos valores testados de cada Sieve */
     for (int cursor = 0; cursor < sieves->tamanhoMaximo; cursor++)
     {
         /* Loop para percorrer todos os Sieves na Lista Circular Sieve */
-        sieve = sieves->anel[cursor]; /* captura a sieve atual */
+        sieve = sieves->anel[cursor];  /* captura a sieve atual */
         if (sieve.estado == BLOQUEADO) /* caso a Sieve estiver bloqueada */
             printf("[sieve %d] valor ser testado %d - bloqueado\n", cursor, sieves->anel[cursor].valorSerTestado);
         else /* caso a Sieve estiver desbloqueada */
@@ -148,7 +149,7 @@ short verificarSieveEstaDisponivelCalculo(ListaCircularSieve *sieves, unsigned p
 short verificarSeElementosSaoDivisiveis(Sieve sieve, unsigned elementoComparado)
 {
     short divisiveis = 0; /* flag que indicara se algum elemento dos valores testados são divisiveis, inicialmente consideramos que não tenha */
-    unsigned elemento; /* variável para auxilar nos testes */
+    unsigned elemento;    /* variável para auxilar nos testes */
     for (int cursor = 0; cursor < sieve.qntdValoresTestados; cursor++)
     {
         /* Loop que percorre o vetor de valores testados da Sieve */
@@ -163,15 +164,15 @@ short verificarSeElementosSaoDivisiveis(Sieve sieve, unsigned elementoComparado)
 
     return divisiveis;
 }
-short propagarDadoNaRede(ListaCircularSieve *sieves, unsigned dado){
+short propagarDadoNaRede(ListaCircularSieve *sieves, unsigned dado)
+{
     short dadoEnviado = 0; /* flag responsável guardar se dado foi propagar (1) ou não (0)*/
-    if(sieves && dado > 0){
+    if (sieves && dado > 0)
+    {
         /* Caso a Lista Circular Sieve e o dado for válidos */
-        if(sieves->anel[0].estado == DESBLOQUEADO){
-            /* Caso a Sieve estiver desbloqueda */
-            sieves->anel[0].valorSerTestado = dado; /* altera valor, que será propagado na rede */
-            dadoEnviado = 1; /* indica que dado foi propagado */
-        }
+        /* Caso a Sieve estiver desbloqueda */
+        sieves->anel[0].valorSerTestado = dado; /* altera valor, que será propagado na rede */
+        dadoEnviado = 1;                        /* indica que dado foi propagado */
     }
     return dadoEnviado;
 };

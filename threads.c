@@ -115,6 +115,7 @@ void *resultado(void *param)
                 /* Continua no laço e fica na espera até o resultado da resposta seja um valor válido */
                 pthread_cond_wait(&gResultado, &gBloqueioMemoriaCompartilhada);
             }
+
             qntdNumerosCalculados++; /* atualiza quantos números já foram calculados */
             resultado = resposta;    /* cria uma váriavel para imprimir o resultado, para liberar a zona crítiza o mais rápido possível */
             if(resultado.ePrimo)
