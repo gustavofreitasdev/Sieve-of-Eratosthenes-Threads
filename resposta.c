@@ -7,9 +7,12 @@ Resposta *criarResposta(void)
         desbloquearResposta(resposta);                         /* inicia a Resposta como desbloqueada */
     return resposta;
 }
-Resposta *copiarResposta(Resposta *resposta){
+Resposta *copiarResposta(Resposta *resposta)
+{
     Resposta *copiaResposta = criarResposta();
-    if(resposta && copiaResposta){
+    if (resposta && copiaResposta)
+    {
+        /* Caso a resposta seja válida e consiga alocar espaço de memória para copia. Copia os dados*/
         copiaResposta->dado = resposta->dado;
         copiaResposta->divisor = resposta->divisor;
         copiaResposta->ePrimo = resposta->ePrimo;
@@ -64,10 +67,28 @@ void setNumeroNaoPrimoResposta(Resposta *resposta, unsigned sieve, unsigned nume
         resposta->sieve = sieve;     /* define a Sieve que encontrou o Resultado */
     }
 };
+void imprimirResposta(Resposta *resposta)
+{
+    if (resposta && resposta->dado != 0)
+    {
+        /* Caso Resposta for válida e tenha algum dado para ser impresso */
+        if (verificarRespostaNumeroPrimo(resposta))
+        {
+            /* Caso o número for primo */
+            printf("%d is prime (stored in sieve %d)\n", resposta->dado, resposta->sieve); /* caso o número for primo */
+        }
+        else
+        {
+            /* Caso o número não for primo */
+            printf("%d divided by %d at sieve %d\n", resposta->dado, resposta->divisor, resposta->sieve); /* caso o número não for primo */
+        }
+        fflush(stdout);
+    }
+}
 
-short respostaBloqueada(Resposta *resposta){
+short respostaBloqueada(Resposta *resposta)
+{
     short bloqueada = 0;
-
 
     return bloqueada;
 }

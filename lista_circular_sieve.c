@@ -176,3 +176,20 @@ short propagarDadoNaRede(ListaCircularSieve *sieves, unsigned dado)
     }
     return dadoEnviado;
 };
+short verificarPropagarDado(ListaCircularSieve *sieves, unsigned posicao)
+{
+    short propagar = 1;
+    if (sieves && posicao < sieves->tamanhoMaximo)
+    {
+        if (posicao + 1 == sieves->tamanhoMaximo)
+        {
+            propagar = 0;
+        }
+        else
+        {
+            if (sieves->anel[posicao + 1].qntdValoresTestados == 0)
+                propagar = 0;
+        }
+    }
+    return propagar;
+}

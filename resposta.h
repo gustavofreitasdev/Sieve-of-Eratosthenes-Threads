@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #define BLOQUEADO 1
 #define DESBLOQUEADO 0
 
@@ -25,6 +27,8 @@ void desbloquearResposta(Resposta *resposta);
 void setNumeroPrimoResposta(Resposta *resposta, unsigned sieve, unsigned numero);
 /* Função responsável por mudar valor de resposta (quando for um número não primo)*/
 void setNumeroNaoPrimoResposta(Resposta *resposta, unsigned sieve, unsigned numero, unsigned divisor);
+/* Função responsável por imprimir uma resposta */
+void imprimirResposta(Resposta *resposta);
 
 /* Função responsável por verificar se Resposta esa bloqueada */
 short respostaBloqueada(Resposta *resposta);

@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include "lista_circular_sieve.c"
-#include "resposta.h"
+#include "resposta.c"
 
 /* Constantes */
 #define QNTD_THREADS_PRINCIPAL 1
@@ -12,9 +12,10 @@
 
 
 /* Dadois Compartilhados Globais */
-Resposta resposta;
+Resposta *resposta;
 unsigned int qntdNumerosCalculados;
 ListaCircularSieve *sievies;
+short parada;
 
 /* Dados das Threads */
 pthread_mutex_t gBloqueioMemoriaCompartilhada = PTHREAD_MUTEX_INITIALIZER;
