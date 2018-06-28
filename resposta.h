@@ -13,6 +13,7 @@ typedef struct tResposta
 
 /* Função responsável por criar Resposta */
 Resposta *criarResposta();
+Resposta *copiarResposta(Resposta *resposta);
 /* Função responsável por liberar espaço de memória de uma Resposta */
 void liberarResposta(Resposta *resposta);
 
@@ -21,9 +22,9 @@ void bloquearResposta(Resposta *resposta);
 /* Função responsável por desbloquear resposta */
 void desbloquearResposta(Resposta *resposta);
 /* Função responsável por mudar valor de resposta (quando for um número primo)*/
-void setNumeroPrimoResposta(Resposta *resposta, unsigned numero);
+void setNumeroPrimoResposta(Resposta *resposta, unsigned sieve, unsigned numero);
 /* Função responsável por mudar valor de resposta (quando for um número não primo)*/
-void setNumeroNaoPrimoResposta(Resposta *resposta, unsigned numero, unsigned divisor);
+void setNumeroNaoPrimoResposta(Resposta *resposta, unsigned sieve, unsigned numero, unsigned divisor);
 
 /* Função responsável por verificar se Resposta esa bloqueada */
 short respostaBloqueada(Resposta *resposta);
